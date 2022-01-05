@@ -254,7 +254,7 @@ return [
         ],
         [
             'text' => 'Update Mobil',
-            'url' => 'admin/settings',
+            'url' => 'admin/mobil',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
