@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\MobilController;
+use App\Http\Controllers\PenyewaController;
+use App\Http\Controllers\SewaController;
+use App\Http\Controllers\SopirController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,3 +49,7 @@ Route::group(['prefix' => 'pengguna', 'middleware' => ['auth', 'role:pengguna']]
 });
 
 Route::resource('admin/mobil', MobilController::class);
+Route::resource('admin/sopir', SopirController::class);
+Route::resource('admin/penyewa', PenyewaController::class);
+Route::resource('admin/sewa', SewaController::class);
+Route::resource('admin/transaksi', TransaksiController::class);

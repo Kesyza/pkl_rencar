@@ -259,7 +259,7 @@ return [
         ],
         [
             'text' => 'Update Sopir',
-            'url' => 'admin/settings',
+            'url' => 'admin/sopir',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
@@ -268,13 +268,23 @@ return [
             'submenu' => [
                 [
                     'text' => 'Sewa',
-                    'url' => '#',
+                    'url' => 'admin/sewa',
                 ],
                 [
                     'text' => 'Cek Sewa Online',
                     'url' => '#',
                 ],
             ],
+        ],
+        [
+            'text' => 'Data Penyewa',
+            'url' => 'admin/penyewa',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'Data Transaksi',
+            'url' => 'admin/transaksi',
+            'icon' => 'fas fa-fw fa-user',
         ],
         [
             'text' => 'Pengembalian Mobil',

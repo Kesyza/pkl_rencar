@@ -28,4 +28,9 @@ class Mobil extends Model
         }
 
     }
+
+    public function sewas()
+    {
+        $this->hasMany('App\Models\Sewa', 'id_mobil');
+    }
 }

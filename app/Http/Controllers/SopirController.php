@@ -14,7 +14,9 @@ class SopirController extends Controller
      */
     public function index()
     {
-        //
+        $sopir = Sopir::all();
+        return view('admin.sopir.index', compact('sopir'));
+
     }
 
     /**
@@ -24,7 +26,8 @@ class SopirController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.sopir.create');
+
     }
 
     /**
@@ -35,7 +38,19 @@ class SopirController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_sopir' => 'required',
+            'alamat' => 'required',
+            'nomor_hp' => 'required',
+        ]);
+
+        $sopir = new Sopir;
+        $sopir->nama_sopir = $request->nama_sopir;
+        $sopir->alamat = $request->alamat;
+        $sopir->nomor_hp = $request->nomor_hp;
+        $sopir->save();
+        return redirect()->route('sopir.index');
+
     }
 
     /**
@@ -44,9 +59,10 @@ class SopirController extends Controller
      * @param  \App\Models\Sopir  $sopir
      * @return \Illuminate\Http\Response
      */
-    public function show(Sopir $sopir)
+    public function show($id)
     {
-        //
+        $sopir = Sopir::findOrFail($id);
+        return view('admin.sopir.show', compact('sopir'));
     }
 
     /**
@@ -55,9 +71,11 @@ class SopirController extends Controller
      * @param  \App\Models\Sopir  $sopir
      * @return \Illuminate\Http\Response
      */
-    public function edit(Sopir $sopir)
+    public function edit($id)
     {
-        //
+        $sopir = Sopir::findOrFail($id);
+        return view('admin.sopir.edit', compact('sopir'));
+
     }
 
     /**
@@ -67,9 +85,21 @@ class SopirController extends Controller
      * @param  \App\Models\Sopir  $sopir
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Sopir $sopir)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nama_sopir' => 'required',
+            'alamat' => 'required',
+            'nomor_hp' => 'required',
+        ]);
+
+        $sopir = Sopir::findOrFail($id);
+        $sopir->nama_sopir = $request->nama_sopir;
+        $sopir->alamat = $request->alamat;
+        $sopir->nomor_hp = $request->nomor_hp;
+        $sopir->save();
+        return redirect()->route('sopir.index')->with('status', 'Data Berhasil ditambah!');
+
     }
 
     /**
@@ -78,8 +108,11 @@ class SopirController extends Controller
      * @param  \App\Models\Sopir  $sopir
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sopir $sopir)
+    public function destroy($id)
     {
-        //
+        $sopir = Sopir::findOrFail($id);
+        $sopir->delete();
+        return redirect()->route('sopir.index')->with('status', 'Data Berhasil dihapus!');
+
     }
 }

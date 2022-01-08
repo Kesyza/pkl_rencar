@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mobil;
+use App\Models\Sewa;
+use App\Models\Sopir;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 
@@ -14,7 +17,9 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        //
+        $transaksi = Transaksi::all();
+        return view('admin.transaksi.index', compact('transaksi'));
+
     }
 
     /**
@@ -24,7 +29,11 @@ class TransaksiController extends Controller
      */
     public function create()
     {
-        //
+        $sewa = Sewa::all();
+        $mobil = Mobil::all();
+        $sopir = Sopir::all();
+        return view('admin.transaksi.create', compact('sewa', 'mobil', 'sopir'));
+
     }
 
     /**
@@ -35,7 +44,25 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'id_sewa' => 'required',
+            'id_mobil' => 'required',
+            'id_sopir' => 'required',
+            'tanggal_kembali' => 'required',
+            'jumlah_bayar' => 'required',
+            'denda' => 'required',
+        ]);
+
+        $transaksi = new Transaksi;
+        $transaksi->id_sewa = $request->id_sewa;
+        $transaksi->id_mobil = $request->id_mobil;
+        $transaksi->id_sopir = $request->id_sopir;
+        $transaksi->tanggal_kembali = $request->tanggal_kembali;
+        $transaksi->jumlah_bayar = $request->jumlah_bayar;
+        $transaksi->denda = $request->denda;
+        $transaksi->save();
+        return redirect()->route('transaksi.index');
+
     }
 
     /**
@@ -44,9 +71,11 @@ class TransaksiController extends Controller
      * @param  \App\Models\Transaksi  $transaksi
      * @return \Illuminate\Http\Response
      */
-    public function show(Transaksi $transaksi)
+    public function show($id)
     {
-        //
+        $transaksi = Transaksi::findOrFail($id);
+        return view('admin.transaksi.show', compact('transaksi'));
+
     }
 
     /**
@@ -55,9 +84,14 @@ class TransaksiController extends Controller
      * @param  \App\Models\Transaksi  $transaksi
      * @return \Illuminate\Http\Response
      */
-    public function edit(Transaksi $transaksi)
+    public function edit($id)
     {
-        //
+        $transaksi = Transaksi::findOrFail($id);
+        $sewa = Sewa::all();
+        $mobil = Mobil::all();
+        $sopir = Sopir::all();
+        return view('admin.transaksi.edit', compact('transaksi', 'sewa', 'mobil', 'sopir'));
+
     }
 
     /**
@@ -67,9 +101,27 @@ class TransaksiController extends Controller
      * @param  \App\Models\Transaksi  $transaksi
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transaksi $transaksi)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'id_sewa' => 'required',
+            'id_mobil' => 'required',
+            'id_sopir' => 'required',
+            'tanggal_kembali' => 'required',
+            'jumlah_bayar' => 'required',
+            'denda' => 'required',
+        ]);
+
+        $transaksi = Transaksi::findOrFail($id);
+        $transaksi->id_sewa = $request->id_sewa;
+        $transaksi->id_mobil = $request->id_mobil;
+        $transaksi->id_sopir = $request->id_sopir;
+        $transaksi->tanggal_kembali = $request->tanggal_kembali;
+        $transaksi->jumlah_bayar = $request->jumlah_bayar;
+        $transaksi->denda = $request->denda;
+        $transaksi->save();
+        return redirect()->route('transaksi.index')->with('status', 'Data Berhasil ditambah!');
+
     }
 
     /**
@@ -78,8 +130,11 @@ class TransaksiController extends Controller
      * @param  \App\Models\Transaksi  $transaksi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaksi $transaksi)
+    public function destroy($id)
     {
-        //
+        $transaksi = Transaksi::findOrFail($id);
+        $transaksi->delete();
+        return redirect()->route('transaksi.index')->with('status', 'Data Berhasil dihapus!');
+
     }
 }

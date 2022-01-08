@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Penyewa;
 use App\Models\Sewa;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,9 @@ class SewaController extends Controller
      */
     public function index()
     {
-        //
+        $sewa = Sewa::with('penyewas')->get();
+        return view('admin.sewa.index', compact('sewa'));
+
     }
 
     /**
@@ -24,7 +27,9 @@ class SewaController extends Controller
      */
     public function create()
     {
-        //
+        $penyewa = Penyewa::all();
+        return view('admin.sewa.create', compact('penyewa'));
+
     }
 
     /**
@@ -35,7 +40,23 @@ class SewaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nomor_nota' => 'required',
+            'id_penyewa' => 'required',
+            'tanggal_sewa' => 'required',
+            'jaminan' => 'required',
+            'status_sewa' => 'required',
+        ]);
+
+        $sewa = new Sewa;
+        $sewa->nomor_nota = $request->nomor_nota;
+        $sewa->id_penyewa = $request->id_penyewa;
+        $sewa->tanggal_sewa = $request->tanggal_sewa;
+        $sewa->jaminan = $request->jaminan;
+        $sewa->status_sewa = $request->status_sewa;
+        $sewa->save();
+        return redirect()->route('sewa.index');
+
     }
 
     /**
@@ -44,9 +65,11 @@ class SewaController extends Controller
      * @param  \App\Models\Sewa  $sewa
      * @return \Illuminate\Http\Response
      */
-    public function show(Sewa $sewa)
+    public function show($id)
     {
-        //
+        $sewa = Sewa::findOrFail($id);
+        return view('admin.sewa.show', compact('sewa'));
+
     }
 
     /**
@@ -55,9 +78,12 @@ class SewaController extends Controller
      * @param  \App\Models\Sewa  $sewa
      * @return \Illuminate\Http\Response
      */
-    public function edit(Sewa $sewa)
+    public function edit($id)
     {
-        //
+        $sewa = Sewa::findOrFail($id);
+        $penyewa = Penyewa::all();
+        return view('admin.sewa.edit', compact('sewa', 'penyewa'));
+
     }
 
     /**
@@ -67,9 +93,25 @@ class SewaController extends Controller
      * @param  \App\Models\Sewa  $sewa
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Sewa $sewa)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nomor_nota' => 'required',
+            'id_penyewa' => 'required',
+            'tanggal_sewa' => 'required',
+            'jaminan' => 'required',
+            'status_sewa' => 'required',
+        ]);
+
+        $sewa = Sewa::findOrFail($id);
+        $sewa->nomor_nota = $request->nomor_nota;
+        $sewa->id_penyewa = $request->id_penyewa;
+        $sewa->tanggal_sewa = $request->tanggal_sewa;
+        $sewa->jaminan = $request->jaminan;
+        $sewa->status_sewa = $request->status_sewa;
+        $sewa->save();
+        return redirect()->route('sewa.index')->with('status', 'Data Berhasil ditambah!');
+
     }
 
     /**
@@ -78,8 +120,11 @@ class SewaController extends Controller
      * @param  \App\Models\Sewa  $sewa
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sewa $sewa)
+    public function destroy($id)
     {
-        //
+        $sewa = Sewa::findOrFail($id);
+        $sewa->delete();
+        return redirect()->route('sewa.index')->with('status', 'Data Berhasil dihapus!');
+
     }
 }
